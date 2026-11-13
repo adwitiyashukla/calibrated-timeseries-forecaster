@@ -41,7 +41,7 @@ def _integer(table: dict[str, Any], key: str, where: str, low: int, high: int) -
 
 def _number(table: dict[str, Any], key: str, where: str, low: float, high: float) -> float:
     value = table.get(key)
-    if isinstance(value, bool) or not isinstance(value, (int, float)):
+    if isinstance(value, bool) or not isinstance(value, int | float):
         raise ConfigError(f"[{where}].{key} must be a number")
     number = float(value)
     if number < low or number > high:
@@ -74,7 +74,7 @@ def _number_list(table: dict[str, Any], key: str, where: str, low: float, high: 
         raise ConfigError(f"[{where}].{key} must be a non-empty list of numbers")
     items = []
     for entry in value:
-        if isinstance(entry, bool) or not isinstance(entry, (int, float)):
+        if isinstance(entry, bool) or not isinstance(entry, int | float):
             raise ConfigError(f"[{where}].{key} entries must be numbers")
         number = float(entry)
         if number < low or number > high:
