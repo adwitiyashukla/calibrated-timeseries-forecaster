@@ -1,0 +1,101 @@
+[data]
+source_base_url = "https://raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset"
+raw_dir = "data/raw"
+panel_dir = "data/panel"
+download_timeout_seconds = 900
+
+[run]
+seed = 7
+artifact_dir = "artifacts"
+frequencies = ["Yearly", "Quarterly", "Monthly", "Weekly", "Daily", "Hourly"]
+window_cap_scale = 1.0
+holdout_series_fraction = 0.05
+threads = 0
+
+[frequency.Yearly]
+horizon = 6
+period = 1
+lookback = 12
+max_windows_per_series = 40
+
+[frequency.Quarterly]
+horizon = 8
+period = 4
+lookback = 16
+max_windows_per_series = 30
+
+[frequency.Monthly]
+horizon = 18
+period = 12
+lookback = 36
+max_windows_per_series = 8
+
+[frequency.Weekly]
+horizon = 13
+period = 1
+lookback = 52
+max_windows_per_series = 400
+
+[frequency.Daily]
+horizon = 14
+period = 1
+lookback = 28
+max_windows_per_series = 100
+
+[frequency.Hourly]
+horizon = 48
+period = 24
+lookback = 168
+max_windows_per_series = 300
+
+[features]
+scale_floor = 1e-8
+include_window_statistics = true
+
+[lgbm]
+objective = "l1"
+num_leaves = 63
+learning_rate = 0.05
+num_boost_round = 500
+min_data_in_leaf = 100
+feature_fraction = 0.8
+bagging_fraction = 0.8
+bagging_freq = 1
+lambda_l2 = 1.0
+max_bin = 127
+early_stopping_rounds = 50
+
+[nhits]
+stacks = 3
+mlp_width = 256
+mlp_layers = 2
+pooling_sizes = [8, 4, 1]
+interpolation_factors = [16, 4, 1]
+dropout = 0.0
+batch_size = 1024
+epochs = 20
+learning_rate = 0.001
+weight_decay = 0.0
+early_stopping_patience = 4
+max_train_samples = 300000
+
+[blend]
+weight_grid = 41
+
+[conformal]
+levels = [0.8, 0.95]
+calibration_origins = 4
+shrinkage_weight = 0.5
+score_floor = 1e-8
+
+[evaluation]
+bootstrap_samples = 2000
+bootstrap_seed = 11
+bootstrap_series_fraction = 1.0
+
+[serving]
+host = "127.0.0.1"
+port = 8000
+onnx_opset = 17
+latency_iterations = 500
+latency_warmup = 50
